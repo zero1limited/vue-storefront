@@ -374,6 +374,7 @@ class Storefront extends Abstract {
         config.images.baseUrl = this.answers.images_endpoint
         config.cms.endpoint = `${backendPath}/api/ext/cms-data/cms{{type}}/{{cmsId}}`
         config.cms.endpointIdentifier = `${backendPath}/api/ext/cms-data/cms{{type}}Identifier/{{cmsIdentifier}}/storeId/{{storeId}}`
+        config.cms.prismic = `${backendPath}/api/ext/cms-data/cmsPrismic`
 
         config.install = {
           is_local_backend: Abstract.wasLocalBackendInstalled,

@@ -1,6 +1,7 @@
 <template>
   <div class="container">
     <h1>Cms content</h1>
+    <cms-prismic :identifier="'identyfikator'" />
 
     <h2>
       Cms page content
@@ -37,10 +38,12 @@
 
 <script>
 import CmsData from 'src/extensions/cms/components/CmsData'
+import CmsPrismic from 'src/extensions/cms/components/CmsPrismic'
 
 export default {
   components: {
-    CmsData
+    CmsData,
+    CmsPrismic
   }
 }
 </script>
