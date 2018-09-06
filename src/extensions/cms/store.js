@@ -2,7 +2,8 @@ import fetch from 'isomorphic-fetch'
 
 const state = {
   cmsPages: [],
-  cmsBlocks: []
+  cmsBlocks: [],
+  cmsPrismic: []
 }
 
 const getters = {
@@ -17,6 +18,9 @@ const getters = {
   },
   getPageIdentifier: (state) => (identifier) => {
     return state.cmsPages.find(item => item.identifier === identifier)
+  },
+  getPrismicPage: (state) => (id) => {
+    return state.cmsPages.find(item => item.id === id)
   }
 }
 
@@ -37,6 +41,29 @@ const actions = {
       .catch(function (err) {
         console.log(err)
         console.error('You need to install a custom Magento module from Snow.dog to make the CMS magick happen. Please go to https://github.com/SnowdogApps/magento2-cms-api and follow the instructions')
+      })
+  },
+  loadPrismicPage (context, {type, orderings}) {
+    fetch('http://localhost:8080/api/ext/cms-data/cmsPrismic/' + type + '/' + orderings, { // should be: config.cms.prismic
+      method: 'GET',
+      headers: {'Content-Type': 'application/json'}
+    })
+      .then((response) => {
+        return response.text()
+      })
+      .then((res) => {
+        let json = JSON.parse(res)
+        let temp = []
+        for (let key in json.result[0].data) {
+          temp.push(json.result[0].data[key])
+        }
+        if (temp) {
+          'cms/loadCms'.commit(`setPrismicPage`, temp)
+          console.log('commited PrismicPage')
+        }
+      })
+      .catch(() => {
+        console.log('CMS module error.')
       })
   }
 }

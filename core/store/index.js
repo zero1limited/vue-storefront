@@ -102,6 +102,11 @@ const plugins = [
           console.error(reason)
         })
       }
+      if (actionName === 'setPrismicPage') {
+        global.$VS.db.cmsData.setItem('cms-data', state.cms).catch((reason) => {
+          console.error(reason)
+        })
+      }
     })
   }
 ]
