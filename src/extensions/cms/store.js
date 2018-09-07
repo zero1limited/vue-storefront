@@ -19,8 +19,8 @@ const getters = {
   getPageIdentifier: (state) => (identifier) => {
     return state.cmsPages.find(item => item.identifier === identifier)
   },
-  getPrismicPage: (state) => (id) => {
-    return state.cmsPages.find(item => item.id === id)
+  getPrismicPage: (state) => (type) => {
+    return state.cmsPrismic.find(item => item.type === type)
   }
 }
 
@@ -46,21 +46,15 @@ const actions = {
   loadPrismicPage (context, {type, orderings}) {
     fetch('http://localhost:8080/api/ext/cms-data/cmsPrismic/' + type + '/' + orderings, { // should be: config.cms.prismic
       method: 'GET',
-      headers: {'Content-Type': 'application/json'}
+      headers: {'Content-Type': 'application/json'},
+      mode: 'cors'
     })
       .then((response) => {
         return response.text()
       })
       .then((res) => {
         let json = JSON.parse(res)
-        let temp = []
-        for (let key in json.result[0].data) {
-          temp.push(json.result[0].data[key])
-        }
-        if (temp) {
-          'cms/loadCms'.commit(`setPrismicPage`, temp)
-          console.log('commited PrismicPage')
-        }
+        context.commit(`setPrismicPage`, json.result[0])
       })
       .catch(() => {
         console.log('CMS module error.')
@@ -78,6 +72,11 @@ const mutations = {
   setCmsPage (state, data) {
     if (!state.cmsPages.filter(e => e.id === data.id).length > 0) {
       state.cmsPages.push(data)
+    }
+  },
+  setPrismicPage (state, data) {
+    if (!state.cmsPrismic.filter(e => e.type === data.type).length > 0) {
+      state.cmsPrismic.push(data)
     }
   }
 }

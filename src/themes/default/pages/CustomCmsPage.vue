@@ -1,7 +1,7 @@
 <template>
   <div class="container">
     <h1>Hi, Prismic content down below</h1>
-    <cms-prismic :type="'page1'" :orderings="'some'"/>
+    <cms-prismic :type="'page1'" :orderings="'tag1'"/>
   </div>
 </template>
 

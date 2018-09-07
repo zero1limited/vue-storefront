@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div v-for="value in cms" :key="value.id">
+    <div v-for="value in data['data']" :key="value.id">
       <p v-if="value[0].type === 'paragraph'">{{ value[0].text }}</p>
       <h1 v-if="value[0].type === 'heading1'">{{ value[0].text }}</h1>
       <h2 v-if="value[0].type === 'heading2'">{{ value[0].text }}</h2>
@@ -17,30 +17,17 @@
 
 <script>
 import config from 'config'
-import fetch from 'isomorphic-fetch'
 
 export default {
   name: 'CmsPrismic',
   beforeMount () {
-    fetch('http://localhost:8080/api/ext/cms-data/cmsPrismic/' + this.type + '/' + this.orderings, { // should be: config.cms.prismic
-      method: 'GET',
-      headers: {'Content-Type': 'application/json'}
-    })
-      .then((response) => {
-        return response.text()
-      })
-      .then((res) => {
-        let json = JSON.parse(res)
-        let temp = []
-        for (let key in json.result[0].data) {
-          temp.push(json.result[0].data[key])
-        }
-        this.cms = temp
-        this.loading = false
-      })
-      .catch(() => {
-        console.log('CMS module error.')
-      })
+    this.$store.dispatch(
+      'cms/loadPrismicPage',
+      {
+        type: this.type,
+        orderings: this.orderings
+      }
+    )
   },
   props: {
     type: {
@@ -54,6 +41,15 @@ export default {
       required: true
     }
   },
+  computed: {
+    data () {
+      let res = this.$store.getters['cms/getPrismicPage'](this.type)
+      if (res) {
+        this.hideLoading()
+      }
+      return res
+    }
+  },
   data () {
     return {
       loading: true,
@@ -63,6 +59,9 @@ export default {
   methods: {
     getEndpointPath () {
       return config.cms.prismic
+    },
+    hideLoading () {
+      this.loading = false
     }
   }
 }
