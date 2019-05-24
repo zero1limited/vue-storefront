@@ -33,3 +33,8 @@ core/resource/i18n/ru-RU.json
 
 #unit testing
 /test/unit/coverage
+
+# themes
+/src/themes/*
+!/src/themes/default
+!/src/themes/default-amp

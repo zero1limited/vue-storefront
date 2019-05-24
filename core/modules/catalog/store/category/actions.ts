@@ -44,7 +44,7 @@ const actions: ActionTree<CategoryState, RootState> = {
     if (level !== null) {
       searchQuery = searchQuery.applyFilter({key: 'level', value: {'eq': level}})
       if (level !== rootStore.state.config.entities.category.categoriesDynamicPrefetchLevel && !isServer) // if this is the default level we're getting the results from window.__INITIAL_STATE__ not querying the server
-      customizedQuery = true
+        customizedQuery = true
     }
 
     if (key !== null) {
@@ -65,26 +65,26 @@ const actions: ActionTree<CategoryState, RootState> = {
       customizedQuery = true
     }
     if (skipCache || ((!context.state.list || context.state.list.length === 0) || customizedQuery)) {
-    return quickSearchByQuery({ entityType: 'category', query: searchQuery, sort: sort, size: size, start: start, includeFields: includeFields, excludeFields: excludeFields }).then((resp) => {
-      for (let category of resp.items) {
-        if (category.url_path && updateState) {
-          rootStore.dispatch('url/registerMapping', {
-            url: category.url_path,
-            routeData: {
-              params: {
-                'slug': category.slug
-              },
-              'name': 'category'
-            }
-          }, { root: true })
+      return quickSearchByQuery({ entityType: 'category', query: searchQuery, sort: sort, size: size, start: start, includeFields: includeFields, excludeFields: excludeFields }).then((resp) => {
+        for (let category of resp.items) {
+          if (category.url_path && updateState) {
+            rootStore.dispatch('url/registerMapping', {
+              url: category.url_path,
+              routeData: {
+                params: {
+                  'slug': category.slug
+                },
+                'name': 'category'
+              }
+            }, { root: true })
+          }
         }
-      }
-      if (updateState) {
-        commit(types.CATEGORY_UPD_CATEGORIES, Object.assign(resp, { includeFields, excludeFields }))
-        Vue.prototype.$bus.$emit('category-after-list', { query: searchQuery, sort: sort, size: size, start: start, list: resp })
-      }
-      return resp
-    })
+        if (updateState) {
+          commit(types.CATEGORY_UPD_CATEGORIES, Object.assign(resp, { includeFields, excludeFields }))
+          Vue.prototype.$bus.$emit('category-after-list', { query: searchQuery, sort: sort, size: size, start: start, list: resp })
+        }
+        return resp
+      })
     } else {
       return new Promise((resolve, reject) => {
         let resp = { items: context.state.list, total: context.state.list.length }
@@ -234,7 +234,7 @@ const actions: ActionTree<CategoryState, RootState> = {
       excludeFields = null
       includeFields = null
       Logger.log('Caching request only, no state update')()
-    }    
+    }
     let t0 = new Date().getTime()
 
     const precachedQuery = searchProductQuery
@@ -292,6 +292,7 @@ const actions: ActionTree<CategoryState, RootState> = {
             let filterOptions = []
 
             let uniqueFilterValues = new Set<string>()
+            let optionLabels = [];
             if (attrToFilter !== 'price') {
               if (res.aggregations['agg_terms_' + attrToFilter]) {
                 let buckets = res.aggregations['agg_terms_' + attrToFilter].buckets
@@ -300,16 +301,19 @@ const actions: ActionTree<CategoryState, RootState> = {
                 }
 
                 for (let option of buckets) {
-                  uniqueFilterValues.add(toString(option.key))
+                  uniqueFilterValues.add(toString(option.key));
+                  optionLabels[toString(option.key)] = option.label;
                 }
               }
 
               uniqueFilterValues.forEach(key => {
-                const label = optionLabel(rootStore.state.attribute, { attributeKey: attrToFilter, optionId: key })
+                // CALLUM CHANGED THIS
+                // const label = optionLabel(rootStore.state.attribute, { attributeKey: attrToFilter, optionId: key })
+                const label = optionLabels[key];
                 if (trim(label) !== '') { // is there any situation when label could be empty and we should still support it?
                   filterOptions.push({
                     id: key,
-                    label: label
+                    label: toString(label)
                   })
                 }
               });
