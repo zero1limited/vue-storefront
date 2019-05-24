@@ -5,8 +5,9 @@ services:
     build:
       context: .
       dockerfile: docker/vue-storefront/Dockerfile
+    env_file: docker/vue-storefront/default.env
     environment:
-      VS_ENV: ${VS_ENV}
+      VS_ENV: dev
     volumes:
       - './babel.config.js:/var/www/babel.config.js'
       - './config:/var/www/config'
