@@ -17,7 +17,7 @@ import { PromotedOffers } from './promoted-offers'
 import { Ui } from './ui-store'
 // import { GoogleAnalytics } from './google-analytics';
 // import { Hotjar } from './hotjar';
-import { AmpRenderer } from './amp-renderer';
+// import { AmpRenderer } from './amp-renderer';
 import { PaymentBackendMethods } from './payment-backend-methods';
 import { PaymentCashOnDelivery } from './payment-cash-on-delivery';
 import { RawOutputExample } from './raw-output-example'
@@ -25,8 +25,8 @@ import { Magento2CMS } from './magento-2-cms'
 import { InstantCheckout } from './instant-checkout'
 import { Paypal } from './paypal'
 import { Braintree } from './payment-braintree'
-
 // import { Example } from './module-template'
+import { Zero1Routing } from './zero1-routing';
 
 // This is how you can extend any of VS modues
 // const extendCartVuex = {
@@ -46,6 +46,39 @@ import { Braintree } from './payment-braintree'
 //  }
 
 //  extendModule(cartExtend)
+
+// import { extendModule } from '@vue-storefront/core/lib/module'
+// import SearchQuery from '@vue-storefront/core/lib/search/searchQuery'
+// import { storeCodeFromRoute, removeStoreCodeFromRoute } from '@vue-storefront/core/lib/multistore'
+// const customUrlFallback = {
+//   actions: {
+//     async mappingFallback ({ dispatch }, { url, params }: { url: string, params: any}) {
+//       console.info('custom mapping fallback')
+//       const productQuery = new SearchQuery()
+//       url = (removeStoreCodeFromRoute(url) as string)
+//       productQuery.applyFilter({key: 'url_path', value: {'eq': url}}) // Tees category
+//       const products = await dispatch('product/list', { query: productQuery }, { root: true })
+//       if (products && products.items && products.items.length) {
+//         const product = products.items[0]
+//         return {
+//           path: product.url_path
+//         }
+//       } else {
+//         const category = await dispatch('category/single', { key: 'url_path', value: url }, { root: true })
+//         console.log('mapped to category: %s', category)
+//         if (category !== null) {
+//           return {
+//             path: category.url_path
+//           }
+//         }
+//       }
+//     }
+//   }
+// }
+// extendModule({
+//   key: 'blah',
+//   store: { modules: [{ key: 'url', module: customUrlFallback}]}
+// })
 
 /**
  * Some of the modules are registered lazily only when components from the module are appearing on current page.
@@ -74,10 +107,11 @@ export const registerModules: VueStorefrontModule[] = [
   PaymentBackendMethods,
   PaymentCashOnDelivery,
   RawOutputExample,
-  AmpRenderer,
+  // AmpRenderer,
   InstantCheckout,
   Url,
   // Example
   Paypal,
-  Braintree
+  Braintree,
+  Zero1Routing
 ]
