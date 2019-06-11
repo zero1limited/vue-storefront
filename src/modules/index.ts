@@ -25,6 +25,7 @@ import { Magento2CMS } from './magento-2-cms'
 import { InstantCheckout } from './instant-checkout'
 import { Paypal } from './paypal'
 import { Braintree } from './payment-braintree'
+import { Fredhopper } from './fredhopper'
 // import { Example } from './module-template'
 import { Zero1Routing } from './zero1-routing';
 
@@ -113,5 +114,6 @@ export const registerModules: VueStorefrontModule[] = [
   // Example
   Paypal,
   Braintree,
-  Zero1Routing
+  Zero1Routing,
+  Fredhopper
 ]
