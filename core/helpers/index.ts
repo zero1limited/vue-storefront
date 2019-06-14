@@ -30,6 +30,11 @@ export function slugify (text) {
  * @returns {*}
  */
 export function getThumbnailPath (relativeUrl, width, height) {
+  // TODO - this should be in its own module really
+  // just return absolute urls
+  if ( relativeUrl.indexOf('http') >= 0 ){
+    return relativeUrl
+  }
   if (rootStore.state.config.images.useExactUrlsNoProxy) {
     return relativeUrl // this is exact url mode
   } else {
