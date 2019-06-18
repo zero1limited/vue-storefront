@@ -14,5 +14,12 @@ export const actions: ActionTree<FredhopperState, any> = {
     return axios
         .post(url, params)
         .then(resp => { return resp })
+  },
+  search ({}, params) {
+    let url = config.fredhopper.endpoint.search
+
+    return axios
+        .post(url, params)
+        .then(resp => { return resp })
   }
 }
