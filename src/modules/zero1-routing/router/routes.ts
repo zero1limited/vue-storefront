@@ -9,7 +9,8 @@ export const routes = [
   { name: 'downloadable-product', path: '/downloadable-product-path/:parentSku/:slug', component: Product },
   { name: 'grouped-product', path: '/grouped-product-path/:parentSku/:slug', component: Product },
   { name: 'configurable-product', path: '/configurable-product-path/:parentSku/:slug/:childSku', component: Product },
-  { name: 'product', path: 'product-path/:parentSku/:slug/:childSku', component: Product },
+  { name: 'product', path: '/product-path/:parentSku/:slug/:childSku', component: Product },
   { name: 'category', path: '/category-path/:slug', component: Category },
+  // { name: 'category-with-filters', path: '/:slug'}
   { name: 'cms-page', path: '/cms-page-path/:slug', component: CmsPage }
 ]
