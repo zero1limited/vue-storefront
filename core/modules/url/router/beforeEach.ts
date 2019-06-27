@@ -34,19 +34,23 @@ export function beforeEach(to: Route, from: Route, next) {
           next(dynamicRoutes[0])
         } else {
           Logger.error('Route not found ' + routeData['name'], 'dispatcher')()
+          console.log('Route not found: redirecting to /page-not-found');
           next('/page-not-found')
         }
       } else {
         Logger.error('No mapping found for ' + fullPath, 'dispatcher')()
+        console.log('No mapping found: redirecting to /page-not-found');
         next('/page-not-found')
       }
     }).catch(e => {
+      console.error('Error: %s', e);
       Logger.error(e, 'dispatcher')()
       if (!isServer) {
         next('/page-not-found') 
       } else {
-        const storeCode = currentStoreView().storeCode
-        Vue.prototype.$ssrRequestContext.server.response.redirect((storeCode !== '' ? ('/' + storeCode) : '') + '/page-not-found') // TODO: Refactor this one after @filrak will give us a way to access ServerContext from Modules directly :-)
+        Vue.prototype.$ssrRequestContext.server.response.redirect('/page-not-found');
+        // const storeCode = currentStoreView().storeCode
+        // Vue.prototype.$ssrRequestContext.server.response.redirect((storeCode !== '' ? ('/' + storeCode) : '') + '/page-not-found') // TODO: Refactor this one after @filrak will give us a way to access ServerContext from Modules directly :-)
         // ps. we can't use the next() call here as it's not doing the real redirect in SSR mode (just processing different component without changing the URL and that causes the CSR / SSR DOM mismatch while hydrating)
       }
     })
